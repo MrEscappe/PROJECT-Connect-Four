@@ -111,4 +111,149 @@ describe Board do
       end
     end
   end
+
+  describe '#diagonal_check_right?' do
+    subject(:check) { described_class.new }
+
+    context 'Four colors in a right diagonal' do
+      before do
+        check.update_board(0, 0, '🟠')
+        check.update_board(1, 1, '🟠')
+        check.update_board(2, 2, '🟠')
+        check.update_board(3, 3, '🟠')
+      end
+
+      it 'Should return true' do
+        board = check.diagonal_check_right?('🟠')
+        expect(board).to eq(true)
+      end
+    end
+
+    context 'Four colors in a right diagonal, and the last one is different ' do
+      before do
+        check.update_board(0, 0, '🟠')
+        check.update_board(1, 1, '🟠')
+        check.update_board(2, 2, '🟠')
+        check.update_board(3, 3, '🔵')
+      end
+
+      it 'Should return false' do
+        board = check.diagonal_check_right?('🟠')
+        expect(board).to eq(false)
+      end
+    end
+  end
+
+  describe '#diagonal_check_left?' do
+    subject(:check) { described_class.new }
+
+    context 'Four colors in a left diagonal' do
+      before do
+        check.update_board(0, 3, '🟠')
+        check.update_board(1, 2, '🟠')
+        check.update_board(2, 1, '🟠')
+        check.update_board(3, 0, '🟠')
+      end
+
+      it 'Should return true' do
+        board = check.diagonal_check_left?('🟠')
+        expect(board).to eq(true)
+      end
+    end
+
+    context 'Four colors in a right diagonal, and the last one is different ' do
+      before do
+        check.update_board(0, 3, '🟠')
+        check.update_board(1, 2, '🟠')
+        check.update_board(2, 1, '🟠')
+        check.update_board(3, 0, '🔵')
+      end
+
+      it 'Should return false' do
+        board = check.diagonal_check_left?('🟠')
+        expect(board).to eq(false)
+      end
+    end
+  end
+
+  describe '#win?' do
+    subject(:check) { described_class.new }
+
+    context 'Check vertical win' do
+      before do
+        check.update_board(0, 0, '🟠')
+        check.update_board(0, 1, '🟠')
+        check.update_board(0, 2, '🟠')
+        check.update_board(0, 3, '🟠')
+      end
+      it 'Returns true' do
+        win = check.win?
+        expect(win).to be true
+      end
+    end
+
+    context 'Check vertical win' do
+      before do
+        check.update_board(0, 0, '🟠')
+        check.update_board(0, 1, '🟠')
+        check.update_board(0, 2, '🔵')
+        check.update_board(0, 3, '🟠')
+      end
+
+      it 'Return false' do
+        win = check.win?
+        expect(win).to be false
+      end
+    end
+  end
+
+  describe '#available_space_column?' do
+    subject(:check) { described_class.new }
+
+    before do
+      check.update_board(0, 0, '🟠')
+      check.update_board(0, 1, '🟠')
+      check.update_board(0, 2, '🔵')
+      check.update_board(0, 3, '🟠')
+    end
+
+    context 'Check if space is available' do
+      it 'Returns false' do
+        board = check.available_space_column?(0)
+        expect(board).to be false
+      end
+    end
+
+    context 'Check if space is available' do
+      it 'Returns true' do
+        board = check.available_space_column?(4)
+        expect(board).to be true
+      end
+    end
+  end
+
+  describe '#available_space_row' do
+    subject(:check) { described_class.new }
+
+    before do
+      check.update_board(1, 0, '🟠')
+      check.update_board(1, 1, '🟠')
+      check.update_board(1, 2, '🔵')
+      check.update_board(1, 3, '🟠')
+    end
+
+    context 'Check if space is available' do
+      it 'Returns 0 if is available' do
+        board = check.available_space_row(4)
+        expect(board).to eq(0)
+      end
+    end
+
+    context 'Check if space is available' do
+      it 'Returns 1 if is unavailable' do
+        board = check.available_space_row(1)
+        expect(board).to eq(1)
+      end
+    end
+  end
 end
